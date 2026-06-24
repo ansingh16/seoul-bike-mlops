@@ -216,3 +216,16 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# --- project ---
+/data/raw/
+/data/processed/
+/data/interim/
+
+# mlflow local store
+mlruns/
+mlartifacts/
+mlflow.db
+
+# evidently output
+reports/

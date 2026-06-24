@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "seoul-bike-mlops"
+version = "0.1.0"
+description = "MLOps pipeline for forecasting Seoul bike-share demand"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+dependencies = [
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "lightgbm",
+    "requests",
+    "pyyaml",
+    "pandera",
+    "dvc",
+    "mlflow",
+]
+
+[project.optional-dependencies]
+serve = ["fastapi", "uvicorn[standard]", "pydantic"]
+monitor = ["evidently"]
+dev = ["pytest", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
