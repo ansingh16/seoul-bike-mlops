@@ -1,0 +1,11 @@
+stages:
+  ingest:
+    cmd: python -m seoul_bike_mlops.ingest
+    deps:
+      - src/seoul_bike_mlops/ingest.py
+    params:
+      - ingest
+    outs:
+      - data/raw/SeoulBikeData.csv
+      - data/processed/reference.csv
+      - data/processed/current.csv

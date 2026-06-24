@@ -1,0 +1,6 @@
+ingest:
+  raw_url: "https://archive.ics.uci.edu/static/public/560/seoul+bike+sharing+demand.zip"
+  raw_csv: "data/raw/SeoulBikeData.csv"
+  split_date: "2018-09-01"
+  reference_out: "data/processed/reference.csv"
+  current_out: "data/processed/current.csv"
