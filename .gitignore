@@ -221,6 +221,10 @@ __marimo__/
 /data/raw/
 /data/processed/
 /data/interim/
+/data/features/
+
+# trained model binaries
+models/
 
 # mlflow local store
 mlruns/

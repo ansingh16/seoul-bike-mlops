@@ -4,3 +4,9 @@ ingest:
   split_date: "2018-09-01"
   reference_out: "data/processed/reference.csv"
   current_out: "data/processed/current.csv"
+
+validate:
+  inputs:
+    - "data/processed/reference.csv"
+    - "data/processed/current.csv"
+  report_out: "reports/validation.txt"

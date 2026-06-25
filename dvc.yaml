@@ -9,3 +9,14 @@ stages:
       - data/raw/SeoulBikeData.csv
       - data/processed/reference.csv
       - data/processed/current.csv
+
+  validate:
+    cmd: python -m seoul_bike_mlops.validate
+    deps:
+      - src/seoul_bike_mlops/validate.py
+      - data/processed/reference.csv
+      - data/processed/current.csv
+    params:
+      - validate
+    outs:
+      - reports/validation.txt
