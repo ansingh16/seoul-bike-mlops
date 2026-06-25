@@ -32,3 +32,14 @@ stages:
     outs:
       - data/features/reference.csv
       - data/features/current.csv
+
+  train:
+    cmd: python -m seoul_bike_mlops.train
+    deps:
+      - src/seoul_bike_mlops/train.py
+      - data/features/reference.csv
+    params:
+      - train
+      - mlflow
+    outs:
+      - models/lgbm.txt
