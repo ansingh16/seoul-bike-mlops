@@ -10,3 +10,9 @@ validate:
     - "data/processed/reference.csv"
     - "data/processed/current.csv"
   report_out: "reports/validation.txt"
+
+featurize:
+  reference_in: "data/processed/reference.csv"
+  current_in: "data/processed/current.csv"
+  reference_out: "data/features/reference.csv"
+  current_out: "data/features/current.csv"

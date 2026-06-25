@@ -20,3 +20,15 @@ stages:
       - validate
     outs:
       - reports/validation.txt
+
+  featurize:
+    cmd: python -m seoul_bike_mlops.features
+    deps:
+      - src/seoul_bike_mlops/features.py
+      - data/processed/reference.csv
+      - data/processed/current.csv
+    params:
+      - featurize
+    outs:
+      - data/features/reference.csv
+      - data/features/current.csv
