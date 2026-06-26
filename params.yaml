@@ -32,6 +32,9 @@ train:
     colsample_bytree: 0.8
     random_state: 0
 
+evaluate:
+  metrics_out: "metrics.json"
+
 mlflow:
   tracking_uri: "sqlite:///mlflow.db"
   experiment: "seoul-bike-demand"

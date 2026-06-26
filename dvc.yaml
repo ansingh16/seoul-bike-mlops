@@ -43,3 +43,16 @@ stages:
       - mlflow
     outs:
       - models/lgbm.txt
+
+  evaluate:
+    cmd: python -m seoul_bike_mlops.evaluate
+    deps:
+      - src/seoul_bike_mlops/evaluate.py
+      - models/lgbm.txt
+      - data/features/reference.csv
+    params:
+      - train
+      - evaluate
+    metrics:
+      - metrics.json:
+          cache: false
