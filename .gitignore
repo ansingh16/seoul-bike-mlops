@@ -226,6 +226,9 @@ __marimo__/
 # trained model binaries
 models/
 
+# exported champion for the serving image
+serving_model/
+
 # mlflow local store
 mlruns/
 mlartifacts/

@@ -6,7 +6,9 @@ candidate version but the alias doesn't move -- so a worse retrain can't silentl
 replace a model that's already serving.
 """
 
+import json
 import logging
+import shutil
 from pathlib import Path
 
 import mlflow
@@ -17,6 +19,7 @@ from mlflow.tracking import MlflowClient
 logger = logging.getLogger(__name__)
 
 METRIC = "rmse"  # lower is better
+EXPORT_DIR = "serving_model"
 
 
 def latest_run(client: MlflowClient, experiment: str):
@@ -36,6 +39,24 @@ def champion_version(client: MlflowClient, name: str):
         return None
 
 
+def export_champion(client: MlflowClient, name: str, dest: str = EXPORT_DIR) -> None:
+    """Write the current champion to a self-contained model dir for the serving image."""
+    mv = client.get_model_version_by_alias(name, "champion")
+    model = mlflow.lightgbm.load_model(f"models:/{name}@champion")
+    run = client.get_run(mv.run_id)
+    shutil.rmtree(dest, ignore_errors=True)
+    mlflow.lightgbm.save_model(model, dest)
+    info = {
+        "name": name,
+        "alias": "champion",
+        "version": mv.version,
+        "log_target": run.data.params.get("log_target") == "True",
+        "rmse": run.data.metrics.get(METRIC),
+    }
+    Path(dest, "info.json").write_text(json.dumps(info, indent=2) + "\n")
+    logger.info("exported champion v%s to %s/", mv.version, dest)
+
+
 def main(params_path: str = "params.yaml") -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     mf = yaml.safe_load(Path(params_path).read_text())["mlflow"]
@@ -52,16 +73,17 @@ def main(params_path: str = "params.yaml") -> None:
     if champ is None:
         client.set_registered_model_alias(name, "champion", version.version)
         logger.info("no incumbent -- v%s is the first champion", version.version)
-        return
-
-    champ_score = client.get_run(champ.run_id).data.metrics[METRIC]
-    if new_score < champ_score:
-        client.set_registered_model_alias(name, "champion", version.version)
-        logger.info("promoted v%s: %.1f beats champion v%s %.1f", version.version,
-                    new_score, champ.version, champ_score)
     else:
-        logger.info("kept champion v%s (%.1f); v%s did not improve (%.1f)", champ.version,
-                    champ_score, version.version, new_score)
+        champ_score = client.get_run(champ.run_id).data.metrics[METRIC]
+        if new_score < champ_score:
+            client.set_registered_model_alias(name, "champion", version.version)
+            logger.info("promoted v%s: %.1f beats champion v%s %.1f", version.version,
+                        new_score, champ.version, champ_score)
+        else:
+            logger.info("kept champion v%s (%.1f); v%s did not improve (%.1f)", champ.version,
+                        champ_score, version.version, new_score)
+
+    export_champion(client, name)
 
 
 if __name__ == "__main__":
