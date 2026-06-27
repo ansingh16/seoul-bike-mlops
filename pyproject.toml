@@ -22,7 +22,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-serve = ["fastapi", "uvicorn[standard]", "pydantic"]
+serve = ["fastapi", "uvicorn[standard]", "pydantic", "skops"]
 monitor = ["evidently"]
 dev = ["pytest", "ruff"]
 
