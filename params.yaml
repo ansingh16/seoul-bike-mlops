@@ -39,3 +39,10 @@ mlflow:
   tracking_uri: "sqlite:///mlflow.db"
   experiment: "seoul-bike-demand"
   registered_model: "seoul-bike-demand"
+
+monitor:
+  reference_in: "data/processed/reference.csv"
+  current_in: "data/processed/current.csv"
+  model_dir: "serving_model"
+  report_out: "reports/drift.html"
+  drift_threshold: 0.3
