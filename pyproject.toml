@@ -24,13 +24,16 @@ dependencies = [
 [project.optional-dependencies]
 serve = ["fastapi", "uvicorn[standard]", "pydantic", "skops"]
 monitor = ["evidently"]
-dev = ["pytest", "ruff"]
+dev = ["pytest", "ruff", "httpx"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.ruff]
 line-length = 100
+# notebooks are exploratory -- top-level expressions and semicolon-suppressed
+# plots are normal there, so they're not held to the same lint rules as src/
+extend-exclude = ["notebooks"]
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]
